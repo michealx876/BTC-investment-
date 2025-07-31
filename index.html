@@ -12,10 +12,10 @@
       margin: 0;
       padding: 0;
     }
-    header {
+    header, footer {
       background: #111;
-      padding: 20px;
       text-align: center;
+      padding: 20px;
     }
     header h1 {
       color: #00ff99;
@@ -35,13 +35,15 @@
     .details {
       line-height: 1.6;
     }
-    .wallet {
+    .wallet, .qr-code {
       background: #333;
       padding: 15px;
       border-radius: 8px;
-      font-size: 1.1em;
       margin: 20px 0;
-      word-wrap: break-word;
+      text-align: center;
+    }
+    .wallet p, .qr-code img {
+      margin: 10px 0;
     }
     .cta {
       margin-top: 30px;
@@ -55,13 +57,49 @@
       border-radius: 8px;
       font-size: 1.2em;
     }
-    footer {
-      text-align: center;
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    input, textarea {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    input[type="submit"] {
+      background: #00ff99;
+      color: #000;
+      cursor: pointer;
+    }
+    .testimonials {
+      background: #222;
       padding: 20px;
-      font-size: 0.9em;
-      color: #555;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    .btc-rate {
+      font-size: 1.2em;
+      color: #00ff99;
+      text-align: center;
+      margin-top: 20px;
     }
   </style>
+  <script>
+    async function getBTCPrice() {
+      try {
+        const res = await fetch('https://api.coindesk.com/v1/bpi/currentprice/USD.json');
+        const data = await res.json();
+        const price = data.bpi.USD.rate;
+        document.getElementById("btcPrice").innerText = `1 BTC = $${price} USD`;
+      } catch (err) {
+        document.getElementById("btcPrice").innerText = "BTC price unavailable";
+      }
+    }
+    window.onload = getBTCPrice;
+  </script>
 </head>
 <body>
   <header>
@@ -70,6 +108,8 @@
   </header>
   <div class="container">
     <p class="offer">Invest 1,500 BTC and Earn $250 Every Day</p>
+    <div class="btc-rate" id="btcPrice">Loading BTC price...</div>
+
     <div class="details">
       <p>We offer an exclusive opportunity to grow your Bitcoin through our daily return investment plan. With a deposit of 1,500 BTC, you can start receiving $250 every single day.</p>
       <ul>
@@ -78,11 +118,43 @@
         <li>✅ No hidden fees</li>
         <li>✅ 24/7 live support</li>
       </ul>
-      <p class="wallet"><strong>Deposit BTC to:</strong><br />3QqQNVTBeFQs9mKPh8LCpz79L4MNvQwKpU</p>
-      <p>Once your deposit is confirmed, your daily earnings will begin within 24 hours.</p>
     </div>
+
+    <div class="wallet">
+      <strong>Deposit BTC to:</strong>
+      <p>3QqQNVTBeFQs9mKPh8LCpz79L4MNvQwKpU</p>
+    </div>
+
+    <div class="qr-code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:3QqQNVTBeFQs9mKPh8LCpz79L4MNvQwKpU" alt="BTC QR Code" />
+      <p>Scan to send BTC</p>
+    </div>
+
     <div class="cta">
-      <a href="#">Start Earning Now</a>
+      <a href="#signup">Start Earning Now</a>
+    </div>
+
+    <form id="signup">
+      <h2>Sign Up for Investment</h2>
+      <input type="text" placeholder="Full Name" required />
+      <input type="email" placeholder="Email Address" required />
+      <input type="text" placeholder="BTC Wallet Address" required />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <form id="contact">
+      <h2>Contact Us</h2>
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea rows="4" placeholder="Your Message"></textarea>
+      <input type="submit" value="Send Message" />
+    </form>
+
+    <div class="testimonials">
+      <h3>What Our Clients Say</h3>
+      <p>"I started with just 1 BTC and now I’m earning consistently every day!" – <strong>Alex B.</strong></p>
+      <p>"Highly recommended platform, great support and fast payouts." – <strong>Samantha L.</strong></p>
+      <p>"This has changed my financial life. Thank you!" – <strong>Jerome K.</strong></p>
     </div>
   </div>
   <footer>
@@ -90,3 +162,4 @@
   </footer>
 </body>
 </html>
+
